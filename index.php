@@ -6,32 +6,56 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <style>
+        #wrapper {
+            display: flex;
+        }
+        #filters {
+            margin-left: 20px;
+            width: 300px;
+        }
+        #companyList {
+            width: 300px;
+        }
+        li {
+            display: flex;
+            align-items: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 
-<h3>Фильтры:</h3>
+<div id="wrapper">
+    <ul id="companyList">
+        <!-- Список компаний -->
+    </ul>
+    
+    <div id="filters">
+        <h3>Фильтры:</h3>
 
-<label>ID:</label>
-<input type="number" id="idFilter" placeholder="ID" />
+        <label>ID:</label>
+        <input type="number" id="idFilter" placeholder="ID" />
 
-<label>Название компании:</label>
-<input type="text" id="companyNameFilter" placeholder="Название компании" />
+        <label>Название компании:</label>
+        <input type="text" id="companyNameFilter" placeholder="Название компании" />
 
-<label>Страны:</label>
-<select id="countryFilter" multiple="multiple"></select>
+        <label>Страны:</label>
+        <select id="countryFilter" multiple="multiple"></select>
 
-<label>Имя контакта:</label>
-<input type="text" id="contactNameFilter" placeholder="Имя контакта" />
+        <label>Имя контакта:</label>
+        <input type="text" id="contactNameFilter" placeholder="Имя контакта" />
 
-<label>Email:</label>
-<input type="text" id="emailFilter" placeholder="Email" />
+        <label>Email:</label>
+        <input type="text" id="emailFilter" placeholder="Email" />
 
-<label>Тип партнера:</label>
-<input type="text" id="partnerTypeFilter" placeholder="Тип партнера" />
-
-<ul id="companyList">
-    <!-- Список компаний -->
-</ul>
+        <label>Тип партнера:</label>
+        <input type="text" id="partnerTypeFilter" placeholder="Тип партнера" />
+    </div>
+</div>
 
 <script>
 const data = [
@@ -76,20 +100,15 @@ $(document).ready(function() {
         ul.innerHTML = '';
         filteredData.forEach(company => {
             const li = document.createElement('li');
-            li.textContent = company['COMPANY_NAME'];
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = company['ID'];
+            li.appendChild(checkbox);
+            li.appendChild(document.createTextNode(' ' + company['COMPANY_NAME']));
             ul.appendChild(li);
         });
     }
 
     $('#idFilter').on('input', filterAndDisplay);
     $('#companyNameFilter').on('input', filterAndDisplay);
-    $('#countryFilter').on('change', filterAndDisplay);
-    $('#contactNameFilter').on('input', filterAndDisplay);
-    $('#emailFilter').on('input', filterAndDisplay);
-    $('#partnerTypeFilter').on('input', filterAndDisplay);
-
-    filterAndDisplay();
-});
-</script>
-</body>
-</html>
+    $('#countryFilter').on('change', filterAnd
