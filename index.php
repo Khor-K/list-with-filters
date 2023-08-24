@@ -111,4 +111,13 @@ $(document).ready(function() {
 
     $('#idFilter').on('input', filterAndDisplay);
     $('#companyNameFilter').on('input', filterAndDisplay);
-    $('#countryFilter').on('change', filterAnd
+    $('#countryFilter').on('change', filterAndDisplay);
+    $('#contactNameFilter').on('input', filterAndDisplay);
+    $('#emailFilter').on('input', filterAndDisplay);
+    $('#partnerTypeFilter').on('input', filterAndDisplay);
+    
+    filterAndDisplay();
+});
+</script>
+</body>
+</html>
