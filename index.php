@@ -120,11 +120,12 @@ $(document).ready(function() {
     });
     
     // Множество выбранных элементов
-    const selectedItems = new Set();
+    const selectedItems = {};
     
     // Обновление списка выбранных элементов
     function updateSelectedList() {
-        $('#selectedList').text(Array.from(selectedItems).join(', '));
+        const selectedNames = Object.values(selectedItems).join(', ');
+        $('#selectedList').text(selectedNames);
     }
     
     // Добавление строки в таблицу
@@ -134,17 +135,18 @@ $(document).ready(function() {
             .append(`<td>${item['COMPANY_NAME']}</td>`)
             .click(function() {
                 const id = item['ID'];
-                if (selectedItems.has(id)) {
-                    selectedItems.delete(id);
+                if (selectedItems[id]) {
+                    delete selectedItems[id];
                     $(this).removeClass('selected');
                 } else {
-                    selectedItems.add(id);
+                    selectedItems[id] = item['COMPANY_NAME'];
                     $(this).addClass('selected');
                 }
                 updateSelectedList();
             });
         $('#companyTable tbody').append(row);
     }
+
     
     // Фильтрация и отображение
     function filterAndDisplay() {
