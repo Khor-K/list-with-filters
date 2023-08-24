@@ -14,25 +14,41 @@
             margin-left: 20px;
             width: 300px;
         }
-        #companyList {
-            width: 300px;
+        #companyTable {
+            width: 600px;
+            overflow-y: auto;
+            max-height: 300px;
+            border-collapse: collapse;
         }
-        li {
-            display: flex;
-            align-items: center;
+        #companyTable th, #companyTable td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
         }
-        label {
-            display: block;
-            margin-bottom: 10px;
+        .selected {
+            background-color: #f2f2f2;
+        }
+        #selectedItems {
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-
+    
+<div id="selectedItems">Выбранные ID: <span id="selectedList"></span></div>
 <div id="wrapper">
-    <ul id="companyList">
-        <!-- Список компаний -->
-    </ul>
+    <!-- Таблица с компаниями -->
+    <table id="companyTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Company</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Заполнение через JS -->
+        </tbody>
+    </table>
     
     <div id="filters">
         <h3>Фильтры:</h3>
@@ -97,51 +113,72 @@ data.forEach(item => {
 });
 
 $(document).ready(function() {
+        // Инициализация select2
     $('#countryFilter').select2({
-        data: Array.from(countries),
-        placeholder: 'Выберите страну',
+        placeholder: "Выберите страну",
+        allowClear: true
     });
-
+    
+    // Множество выбранных элементов
+    const selectedItems = new Set();
+    
+    // Обновление списка выбранных элементов
+    function updateSelectedList() {
+        $('#selectedList').text(Array.from(selectedItems).join(', '));
+    }
+    
+    // Добавление строки в таблицу
+    function addRowToTable(item) {
+        const row = $('<tr></tr>')
+            .append(`<td>${item['ID']}</td>`)
+            .append(`<td>${item['COMPANY_NAME']}</td>`)
+            .click(function() {
+                const id = item['ID'];
+                if (selectedItems.has(id)) {
+                    selectedItems.delete(id);
+                    $(this).removeClass('selected');
+                } else {
+                    selectedItems.add(id);
+                    $(this).addClass('selected');
+                }
+                updateSelectedList();
+            });
+        $('#companyTable tbody').append(row);
+    }
+    
+    // Фильтрация и отображение
     function filterAndDisplay() {
-        const idFilter = $('#idFilter').val();
+        $('#companyTable tbody').empty();
+        const idFilter = parseInt($('#idFilter').val(), 10);
         const companyNameFilter = $('#companyNameFilter').val().toLowerCase();
-        const selectedCountries = $('#countryFilter').val() || [];
+        const countryFilter = $('#countryFilter').val() || [];
         const contactNameFilter = $('#contactNameFilter').val().toLowerCase();
         const emailFilter = $('#emailFilter').val().toLowerCase();
         const partnerTypeFilter = $('#partnerTypeFilter').val().toLowerCase();
-
-        const filteredData = data.filter(company => {
-            const companyCountries = company['COUNTRY'].split(',').map(s => s.trim());
-            return (idFilter === '' || company['ID'] === parseInt(idFilter)) &&
-                   (companyNameFilter === '' || company['COMPANY_NAME'].toLowerCase().includes(companyNameFilter)) &&
-                   (selectedCountries.length === 0 || selectedCountries.every(country => companyCountries.includes(country))) &&
-                   (contactNameFilter === '' || company['CONTACT_NAME'].toLowerCase().includes(contactNameFilter)) &&
-                   (emailFilter === '' || company['EMAIL'].toLowerCase().includes(emailFilter)) &&
-                   (partnerTypeFilter === '' || company['PARTNER_TYPE'].toLowerCase().includes(partnerTypeFilter));
-        });
-
-        const ul = document.getElementById('companyList');
-        ul.innerHTML = '';
-        filteredData.forEach(company => {
-            const li = document.createElement('li');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.value = company['ID'];
-            li.appendChild(checkbox);
-            li.appendChild(document.createTextNode(' ' + company['COMPANY_NAME']));
-            ul.appendChild(li);
+    
+        data.forEach(item => {
+            if (idFilter && item['ID'] !== idFilter) return;
+            if (companyNameFilter && !item['COMPANY_NAME'].toLowerCase().includes(companyNameFilter)) return;
+            if (contactNameFilter && !item['CONTACT_NAME'].toLowerCase().includes(contactNameFilter)) return;
+            if (emailFilter && !item['EMAIL'].toLowerCase().includes(emailFilter)) return;
+            if (partnerTypeFilter && !item['PARTNER_TYPE'].toLowerCase().includes(partnerTypeFilter)) return;
+    
+            if (countryFilter.length > 0) {
+                const countries = item['COUNTRY'].split(',');
+                if (!countries.some(country => countryFilter.includes(country))) return;
+            }
+    
+            addRowToTable(item);
         });
     }
-
-    $('#idFilter').on('input', filterAndDisplay);
-    $('#companyNameFilter').on('input', filterAndDisplay);
-    $('#countryFilter').on('change', filterAndDisplay);
-    $('#contactNameFilter').on('input', filterAndDisplay);
-    $('#emailFilter').on('input', filterAndDisplay);
-    $('#partnerTypeFilter').on('input', filterAndDisplay);
     
+    // Подписка на события изменения фильтров
+    $('#idFilter, #companyNameFilter, #contactNameFilter, #emailFilter, #partnerTypeFilter').on('input', filterAndDisplay);
+    $('#countryFilter').on('change', filterAndDisplay);
+    
+    // Начальное заполнение
     filterAndDisplay();
-});
+    });
 </script>
 </body>
 </html>
