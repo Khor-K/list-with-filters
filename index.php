@@ -36,24 +36,48 @@
     
     <div id="filters">
         <h3>Фильтры:</h3>
+        
+        <div class="listcontrol-group-add-row">
+            <div class="ui-ctl listcontrol-group-add-row-title">ID:</div>
+            <div class="ui-ctl ui-ctl-textbox">
+                <input type="number" id="idFilter" class="ui-ctl-element list-control-input" placeholder="ID" />
+            </div>
+        </div>
 
-        <label>ID:</label>
-        <input type="number" id="idFilter" placeholder="ID" />
+        <div class="listcontrol-group-add-row">
+            <div class="ui-ctl listcontrol-group-add-row-title">Название компании:</div>
+            <div class="ui-ctl ui-ctl-textbox">
+                <input type="text" id="companyNameFilter" class="ui-ctl-element list-control-input" placeholder="Название компании" />
+            </div>
+        </div>
 
-        <label>Название компании:</label>
-        <input type="text" id="companyNameFilter" placeholder="Название компании" />
+        <div class="listcontrol-group-add-row">
+            <div class="ui-ctl listcontrol-group-add-row-title">Страны:</div>
+            <div class="ui-ctl ui-ctl-textbox">
+                <select id="countryFilter" multiple="multiple" style="width: 100%;"></select>
+            </div>
+        </div>
 
-        <label>Страны:</label>
-        <select id="countryFilter" multiple="multiple"></select>
+        <div class="listcontrol-group-add-row">
+            <div class="ui-ctl listcontrol-group-add-row-title">Имя контакта:</div>
+            <div class="ui-ctl ui-ctl-textbox">
+                <input type="text" id="contactNameFilter" class="ui-ctl-element list-control-input" placeholder="Имя контакта" />
+            </div>
+        </div>
 
-        <label>Имя контакта:</label>
-        <input type="text" id="contactNameFilter" placeholder="Имя контакта" />
+        <div class="listcontrol-group-add-row">
+            <div class="ui-ctl listcontrol-group-add-row-title">Email:</div>
+            <div class="ui-ctl ui-ctl-textbox">
+                <input type="text" id="emailFilter" class="ui-ctl-element list-control-input" placeholder="Email" />
+            </div>
+        </div>
 
-        <label>Email:</label>
-        <input type="text" id="emailFilter" placeholder="Email" />
-
-        <label>Тип партнера:</label>
-        <input type="text" id="partnerTypeFilter" placeholder="Тип партнера" />
+        <div class="listcontrol-group-add-row">
+            <div class="ui-ctl listcontrol-group-add-row-title">Тип партнера:</div>
+            <div class="ui-ctl ui-ctl-textbox">
+                <input type="text" id="partnerTypeFilter" class="ui-ctl-element list-control-input" placeholder="Тип партнера" />
+            </div>
+        </div>
     </div>
 </div>
 
